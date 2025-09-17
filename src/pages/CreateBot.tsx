@@ -1594,7 +1594,7 @@ const CreateBot: React.FC = () => {
                           </div>
                           <div>
                             <span className="font-medium">Created:</span>{" "}
-                            {new Date(memory.createdAt).toLocaleDateString()}
+                            {memory.created_at ? new Date(memory.created_at).toLocaleDateString() : 'N/A'}
                           </div>
                         </div>
                       </div>

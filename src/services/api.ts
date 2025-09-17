@@ -167,7 +167,8 @@ export const botsAPI = {
     id: string,
     status: "active" | "inactive" | "paused" | "error"
   ) => {
-    const response = await api.patch(`/bots/${id}/status`, { status });
+  // Use a higher timeout for start/stop operations which may take longer
+  const response = await api.patch(`/bots/${id}/status`, { status }, { timeout: 30000 });
     return response.data;
   },
 
@@ -198,6 +199,17 @@ export const botsAPI = {
 
   deleteBot: async (id: string) => {
     const response = await api.delete(`/bots/${id}`);
+    return response.data;
+  },
+  // Optional: direct start endpoint (backend returns quickly; frontend can poll process_status)
+  startBot: async (id: string) => {
+    const response = await api.post(`/bots/${id}/start`, undefined, { timeout: 30000 });
+    return response.data;
+  },
+
+  // Optional: poll actual process status
+  getProcessStatus: async (id: string) => {
+    const response = await api.get(`/bots/${id}/process_status`);
     return response.data;
   },
 };

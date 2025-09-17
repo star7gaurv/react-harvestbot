@@ -12,8 +12,8 @@ export const Navbar = ({
   const { user } = useUser();
 
   return (
-    <div className="flex flex-row w-full h-[110px] gap-4">
-      <div className="flex w-3/4 items-center bg-white backdrop-blur-xl rounded-[32px] p-6">
+    <div className="flex flex-row w-full h-[80px] gap-4">
+      <div className="flex w-3/4 items-center bg-white backdrop-blur-xl rounded-[20px] px-6 py-0">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold text-black">{title}</h1>
           {subTitle && (
@@ -22,7 +22,7 @@ export const Navbar = ({
         </div>
         {actions && <div className="ml-auto flex gap-3">{actions}</div>}
       </div>
-      <div className="flex w-1/4 items-center bg-white backdrop-blur-xl rounded-[32px] p-6">
+      <div className="flex w-1/4 items-center bg-white backdrop-blur-xl rounded-[20px] px-6 py-0">
         <div className="flex items-center gap-4 justify-between w-full">
           <div className="text-right">
             <span className="block text-2xl font-semibold text-black">
