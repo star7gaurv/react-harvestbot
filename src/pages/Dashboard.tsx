@@ -7,62 +7,86 @@ import { useDashboard } from "../hooks/useDashboard";
 const Dashboard: React.FC = () => {
   const { stats, loading, error } = useDashboard();
 
+  // Safely format numeric stats without throwing on undefined
+  const nStr = (n?: number | null) => ((n ?? 0).toString());
+
   const statsCards = [
     {
       title: "Total Bots",
-      value: stats?.totalBots.toString() || "0",
+  value: nStr(stats?.totalBots),
       image: "/images/all-bots.svg",
       startColor: "#f093fb",
       endColor: "#f5576c",
     },
     {
       title: "Active Bots",
-      value: stats?.activeBots.toString() || "0",
+  value: nStr(stats?.activeBots),
       image: "/images/active-bots.svg",
       startColor: "#30cfd0",
       endColor: "#330867",
     },
     {
+      title: "Inactive Bots",
+      value: nStr(stats?.inactiveBots),
+      image: "/images/paused-bots.svg",
+      startColor: "#a1c4fd",
+      endColor: "#c2e9fb",
+    },
+    {
       title: "Bots Paused",
-      value: stats?.pausedBots.toString() || "0",
+  value: nStr(stats?.pausedBots),
       image: "/images/paused-bots.svg",
       startColor: "#feada6",
       endColor: "#f5efef",
     },
     {
+      title: "Error Bots",
+      value: nStr(stats?.errorBots),
+      image: "/images/shield-security.svg",
+      startColor: "#f6d365",
+      endColor: "#fda085",
+    },
+    {
       title: "Trade Pairs",
-      value: stats?.tradePairs.toString() || "0",
+  value: nStr(stats?.tradePairs),
       image: "/images/trade-pairs.svg",
       startColor: "#88d3ce",
       endColor: "#6e45e2",
+    },
+    {
+      title: "Total Memories",
+      value: nStr(stats?.totalMemories),
+      image: "/images/saved-memories.svg",
+      startColor: "#ebbba7",
+      endColor: "#cfc7f8",
     },
   ];
 
   const exchangeCards = [
     {
       title: "Active CEX Bots",
-      value: stats?.activeCexBots.toString() || "0",
+  value: nStr(stats?.activeCexBots),
       image: "/images/cex-bots.svg",
       startColor: "#a8edea",
       endColor: "#fed6e3",
     },
     {
       title: "Active DEX Bots",
-      value: stats?.activeDexBots.toString() || "0",
+  value: nStr(stats?.activeDexBots),
       image: "/images/dex-bots.svg",
       startColor: "#d299c2",
       endColor: "#fef9d7",
     },
     {
       title: "CEX Exchanges",
-      value: stats?.cexExchanges.toString() || "0",
+  value: nStr(stats?.cexExchanges),
       image: "/images/cex.svg",
       startColor: "#89f7fe",
       endColor: "#66a6ff",
     },
     {
       title: "DEX Exchanges",
-      value: stats?.dexExchanges.toString() || "0",
+  value: nStr(stats?.dexExchanges),
       image: "/images/dex.svg",
       startColor: "#fdbb2d",
       endColor: "#22c1c3",
@@ -117,17 +141,17 @@ const Dashboard: React.FC = () => {
         {/* Header */}
         <Navbar title="Dashboard" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 bg-white rounded-[32px] p-5 h-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 bg-white rounded-[32px] p-5 h-full">
           {/* Uptime Section */}
-          <div className="col-span-4">
+          <div className="col-span-1 md:col-span-3 lg:col-span-6">
             <StatCardLayout
               image="/images/power.svg"
               startColor="#330867"
               endColor="#30CFD0"
-              className="p-8 flex flex-row"
+              className="p-6 flex flex-row"
             >
               <div className="flex w-1/2 items-center gap-5">
-                <div className="bg-white rounded-full p-2 w-32 h-32 flex items-center justify-center">
+                <div className="rounded-full p-2 w-32 h-32 flex items-center justify-center">
                   <img src="/images/power.svg" alt="Power" />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -176,36 +200,36 @@ const Dashboard: React.FC = () => {
             </StatCardLayout>
           </div>
           {/* Stats Grid */}
-          {statsCards.map((card, index) => (
+      {statsCards.map((card, index) => (
             <StatCardLayout
               key={index}
               image={card.image}
               startColor={card.startColor}
               endColor={card.endColor}
-              className="flex flex-col items-center my-6 gap-2"
+        className="flex flex-col items-center my-4 gap-1 py-3"
             >
-              <div className="bg-white rounded-full p-2 w-[72px] h-[72px] flex items-center justify-center">
+        <div className="bg-white rounded-full p-2 w-[56px] h-[56px] flex items-center justify-center">
                 <img src={card.image} alt={card.title} />
               </div>
-              <div className="text-4xl text-white font-base">{card.value}</div>
-              <div className="text-2xl text-white font-base">{card.title}</div>
+        <div className="text-3xl text-white font-base">{card.value}</div>
+        <div className="text-xl text-white font-base text-center">{card.title}</div>
             </StatCardLayout>
           ))}
 
           {/* Exchange Stats Grid */}
-          {exchangeCards.map((card, index) => (
+      {exchangeCards.map((card, index) => (
             <StatCardLayout
               key={index}
               image={card.image}
               startColor={card.startColor}
               endColor={card.endColor}
-              className="flex flex-col items-center my-6 gap-2"
+        className="flex flex-col items-center my-4 gap-1 py-3"
             >
-              <div className="bg-white rounded-full p-2 w-[72px] h-[72px] flex items-center justify-center">
+        <div className="bg-white rounded-full p-2 w-[56px] h-[56px] flex items-center justify-center">
                 <img src={card.image} alt={card.title} />
               </div>
-              <div className="text-4xl text-white font-base">{card.value}</div>
-              <div className="text-2xl text-white font-base">{card.title}</div>
+        <div className="text-3xl text-white font-base">{card.value}</div>
+        <div className="text-xl text-white font-base text-center">{card.title}</div>
             </StatCardLayout>
           ))}
         </div>
