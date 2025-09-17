@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
 import { StatCardLayout } from "../components/StatCardLayout";
 import { useDashboard } from "../hooks/useDashboard";
 
 const Dashboard: React.FC = () => {
-  const { stats, loading, error } = useDashboard();
+  const { stats, loading, error, fetchStats } = useDashboard();
+  // Light 1s tick to keep any uptime strings feeling live; optionally refetch every 30s
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setTick((v) => v + 1), 1000);
+    const ref = setInterval(() => fetchStats(), 30000);
+    return () => { clearInterval(t); clearInterval(ref); };
+  }, [fetchStats]);
 
   // Safely format numeric stats without throwing on undefined
   const nStr = (n?: number | null) => ((n ?? 0).toString());
