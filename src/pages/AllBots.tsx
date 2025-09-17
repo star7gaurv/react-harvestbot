@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
@@ -14,6 +14,21 @@ const AllBots: React.FC = () => {
   }>({ cex: false, dex: false });
   const { bots, loading, error, updateBotStatus, fetchBots, deleteBot } =
     useBots();
+
+  // Tick every second to refresh uptime display
+  const [now, setNow] = useState<number>(Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatSeconds = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  };
 
   const handleBotClick = (bot: BotType) => {
     setSelectedBot(bot);
@@ -225,6 +240,17 @@ const AllBots: React.FC = () => {
         ? "Error"
         : "Stopped";
 
+    // Live uptime: persisted uptimeSeconds + elapsed since startedAt if active
+    const baseUptime = typeof bot.uptimeSeconds === "number" ? bot.uptimeSeconds : 0;
+    let uptimeText = "00:00:00";
+    if (bot.status === "active" && bot.startedAt) {
+      const startTs = new Date(bot.startedAt).getTime();
+      const diffSeconds = Math.max(0, Math.floor((now - startTs) / 1000));
+      uptimeText = formatSeconds(baseUptime + diffSeconds);
+    } else {
+      uptimeText = formatSeconds(baseUptime);
+    }
+
     // Format date and time
     const dateStarted = bot.startedAt
       ? new Date(bot.startedAt).toLocaleDateString("en-US", {
@@ -272,7 +298,7 @@ const AllBots: React.FC = () => {
               className="text-2xl font-medium text-white"
               style={{ color: statusColor }}
             >
-              {bot.uptime || "00:00:00"}
+              {uptimeText}
             </div>
             <div className="text-2xl text-white">{statusText}</div>
           </div>

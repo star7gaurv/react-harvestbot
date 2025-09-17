@@ -25,6 +25,7 @@ export interface Bot {
   updatedAt: Date;
   startedAt?: Date;
   uptime?: string;
+  uptimeSeconds?: number;
 }
 
 export interface CreateBotData {
@@ -65,6 +66,7 @@ export const useBots = () => {
           createdAt: new Date(bot.createdAt),
           updatedAt: new Date(bot.updatedAt),
           startedAt: bot.startedAt ? new Date(bot.startedAt) : undefined,
+          uptimeSeconds: typeof bot.uptimeSeconds === 'number' ? bot.uptimeSeconds : undefined,
         }));
 
         setBots(formattedBots);
