@@ -15,6 +15,9 @@ const AllBots: React.FC = () => {
   const { bots, loading, error, updateBotStatus, fetchBots, deleteBot } =
     useBots();
 
+  // Mobile sidebar toggle
+  const [menuOpen, setMenuOpen] = useState(false);
+
   // Tick every second to refresh uptime display
   const [now, setNow] = useState<number>(Date.now());
   useEffect(() => {
@@ -420,21 +423,21 @@ const AllBots: React.FC = () => {
   );
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-4 gap-4">
+    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-3 sm:p-4 gap-3 sm:gap-4">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       {/* Main Content */}
-      <div className="flex flex-col w-full gap-4 h-full">
+      <div className="flex flex-col w-full gap-3 sm:gap-4">
         {/* Fixed Navbar */}
         <div className="flex-shrink-0">
-          <Navbar title="All Bots" actions={stopAllActions} />
+          <Navbar title="All Bots" actions={stopAllActions} onMenuClick={() => setMenuOpen(true)} />
         </div>
 
-        {/* Content Area with Fixed Height */}
-        <div className="flex flex-row gap-4 flex-1 min-h-0">
+        {/* Content Area */}
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 flex-1 min-h-0">
           {/* Scrollable All Bots Content */}
-          <div className="flex flex-col bg-white rounded-[32px] w-3/4 h-full overflow-hidden p-5">
+          <div className="flex flex-col bg-white rounded-[24px] md:rounded-[32px] w-full lg:w-3/4 h-full overflow-hidden p-4 md:p-5">
             {/* Header with refresh button */}
             <div className="flex justify-between items-center mb-4">
               <div className="flex gap-4">
@@ -477,7 +480,7 @@ const AllBots: React.FC = () => {
                 <h2 className="text-xl font-base text-gray-600 mb-4">
                   Centralised Bots
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {cexBots.map((bot) =>
                     renderBotCard(bot, selectedBot?.id === bot.id)
                   )}
@@ -489,7 +492,7 @@ const AllBots: React.FC = () => {
                 <h2 className="text-xl font-base text-gray-600 mb-4">
                   Decentralised Bots
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {dexBots.map((bot) => renderBotCard(bot))}
                 </div>
               </div>
@@ -497,7 +500,7 @@ const AllBots: React.FC = () => {
           </div>
 
           {/* Fixed Bot Details Sidebar */}
-          <div className="w-1/4 bg-white rounded-[32px] h-full flex flex-col p-6">
+      <div className="w-full lg:w-1/4 bg-white rounded-[24px] md:rounded-[32px] h-full flex flex-col p-4 md:p-6">
             {selectedBot ? (
               <BotDetails
                 bot={selectedBot}

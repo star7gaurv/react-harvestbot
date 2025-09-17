@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
 import { useMemories, Memory } from "../hooks/useMemories";
 
 const SavedMemories: React.FC = () => {
+  // Mobile sidebar toggle must be first hook
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { memories, loading, error, deleteMemory } = useMemories();
 
@@ -88,13 +90,13 @@ const SavedMemories: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-4 gap-4">
-      <Sidebar />
+    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-3 sm:p-4 gap-3 sm:gap-4">
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       <div className="flex flex-col w-full gap-3">
-        <Navbar title="Saved Memories" />
+        <Navbar title="Saved Memories" onMenuClick={() => setMenuOpen(true)} />
 
-        <div className="bg-white rounded-3xl p-6 shadow-md w-full max-w-full overflow-x-auto h-full">
+  <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-md w-full max-w-full overflow-x-auto h-full">
           {memories.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
               <img

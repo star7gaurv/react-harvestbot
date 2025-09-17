@@ -19,6 +19,8 @@ import { useUser } from "../contexts/UserContext";
 import toast from "react-hot-toast";
 
 const CreateBot: React.FC = () => {
+  // Mobile sidebar toggle must be the first hook
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
@@ -514,8 +516,8 @@ const CreateBot: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-4 gap-4">
-      <Sidebar />
+    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8ff] via-[#f0e8ff] to-[#e8f0ff] p-3 sm:p-4 gap-3 sm:gap-4">
+      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
 
       {/* Error Notification */}
       {showError && botError && (
@@ -556,14 +558,14 @@ const CreateBot: React.FC = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex flex-col w-full gap-4">
+  <div className="flex flex-col w-full gap-3 sm:gap-4">
         {currentStep === 1 ? (
           <>
-            <Navbar title="Start a Bot" />
+    <Navbar title="Start a Bot" onMenuClick={() => setMenuOpen(true)} />
 
             {/* Create Bot Content */}
-            <div className="flex flex-row gap-4 h-full">
-              <div className="flex flex-col bg-white rounded-[32px] w-3/4 h-full p-5">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 h-full">
+              <div className="flex flex-col bg-white rounded-[24px] md:rounded-[32px] w-full lg:w-3/4 h-full p-4 md:p-5">
                 <div className="flex flex-col items-center justify-between h-full">
                   <div className="text-center mt-10">
                     <h2 className="text-5xl font-bold text-black mb-4">
@@ -639,7 +641,7 @@ const CreateBot: React.FC = () => {
               </div>
 
               {/* Created Bots Sidebar */}
-              <div className="w-1/4 bg-white rounded-[32px] px-16 overflow-y-auto h-full gap-3">
+              <div className="w-full lg:w-1/4 bg-white rounded-[24px] md:rounded-[32px] px-8 md:px-16 overflow-y-auto h-full gap-3">
                 <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
                   <img
                     src="/images/any-bots.svg"
@@ -653,11 +655,11 @@ const CreateBot: React.FC = () => {
           </>
         ) : currentStep === 2 ? (
           <>
-            <Navbar title="Start a Bot" subTitle="CEX" />
+            <Navbar title="Start a Bot" subTitle="CEX" onMenuClick={() => setMenuOpen(true)} />
 
             {/* Create Bot Content */}
-            <div className="flex flex-row gap-4 h-full">
-              <div className="flex flex-col bg-white rounded-[32px] w-3/4 h-full p-5">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 h-full">
+              <div className="flex flex-col bg-white rounded-[24px] md:rounded-[32px] w-full lg:w-3/4 h-full p-4 md:p-5">
                 <div className="flex flex-col items-center justify-between h-full">
                   <div className="text-center mt-10">
                     <h2 className="text-5xl font-bold text-black mb-4">
@@ -731,7 +733,7 @@ const CreateBot: React.FC = () => {
               </div>
 
               {/* Created Bots Sidebar */}
-              <div className="w-1/4 bg-white rounded-[32px] px-16 overflow-y-auto h-full gap-3">
+              <div className="w-full lg:w-1/4 bg-white rounded-[24px] md:rounded-[32px] px-8 md:px-16 overflow-y-auto h-full gap-3">
                 <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
                   <img
                     src="/images/any-bots.svg"
@@ -748,11 +750,12 @@ const CreateBot: React.FC = () => {
             <Navbar
               title="Start a Bot"
               subTitle={`${botConfig.exchangeType} >> ${botConfig.network}`}
+              onMenuClick={() => setMenuOpen(true)}
             />
 
             {/* Create Bot Content */}
-            <div className="flex flex-row gap-4 h-full">
-              <div className="flex flex-col bg-white rounded-[32px] w-3/4 h-full p-5">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 h-full">
+              <div className="flex flex-col bg-white rounded-[24px] md:rounded-[32px] w-full lg:w-3/4 h-full p-4 md:p-5">
                 <div className="flex flex-col items-center justify-between h-full">
                   <div className="text-center mt-10">
                     <h2 className="text-5xl font-bold text-black mb-4">
@@ -878,7 +881,7 @@ const CreateBot: React.FC = () => {
               </div>
 
               {/* Created Bots Sidebar */}
-              <div className="w-1/4 bg-white rounded-[32px] px-16 overflow-y-auto h-full gap-3">
+              <div className="w-full lg:w-1/4 bg-white rounded-[24px] md:rounded-[32px] px-8 md:px-16 overflow-y-auto h-full gap-3">
                 <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
                   <img
                     src="/images/any-bots.svg"
@@ -895,12 +898,13 @@ const CreateBot: React.FC = () => {
             <Navbar
               title="Start a Bot"
               subTitle={`${botConfig.exchangeType} >> ${botConfig.network} >> ${botConfig.symbol}`}
+              onMenuClick={() => setMenuOpen(true)}
             />
 
             {/* Create Bot Content */}
-            <div className="flex flex-row gap-4 h-full">
-              <div className="flex flex-col items-center justify-between bg-white rounded-[32px] w-3/4 h-full p-5">
-                <div className="flex flex-row w-full">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 h-full">
+              <div className="flex flex-col items-center justify-between bg-white rounded-[24px] md:rounded-[32px] w-full lg:w-3/4 h-full p-4 md:p-5">
+                  <div className="flex flex-col lg:flex-row w-full gap-6">
                   <div className="flex flex-col flex-1 gap-5 justify-between">
                     <div className="flex flex-col gap-1">
                       <label
@@ -1203,7 +1207,7 @@ const CreateBot: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col flex-1 pl-8 gap-5">
+                    <div className="flex flex-col flex-1 lg:pl-8 gap-5">
                     <div className="flex flex-col gap-1">
                       <label
                         htmlFor="apiKey1"
@@ -1302,7 +1306,7 @@ const CreateBot: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap w-full gap-2 justify-end">
+                <div className="flex flex-wrap w-full gap-2 justify-end mt-4">
                   <button
                     className="flex items-center gap-2 p-2 border border-red-500 text-red-500 rounded-2xl hover:bg-red-600 hover:text-white"
                     onClick={handleDiscardValues}
@@ -1354,7 +1358,7 @@ const CreateBot: React.FC = () => {
               </div>
 
               {/* Created Bots Sidebar */}
-              <div className="w-1/4 bg-white rounded-[32px] px-16 overflow-y-auto h-full gap-3">
+              <div className="w-full lg:w-1/4 bg-white rounded-[24px] md:rounded-[32px] px-8 md:px-16 overflow-y-auto h-full gap-3">
                 {bots.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
                     <img

@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
 
-export const Sidebar = () => {
+export const Sidebar = ({
+  open = true,
+  onClose,
+}: {
+  open?: boolean;
+  onClose?: () => void;
+}) => {
   const navigate = useNavigate();
   const { logout } = useUser();
 
@@ -38,7 +44,20 @@ export const Sidebar = () => {
   };
 
   return (
-    <div className="w-60 h-[calc(100vh-32px)] bg-white backdrop-blur-xl flex flex-col rounded-[32px]">
+    <>
+      {/* Mobile overlay */}
+      <div
+        className={`fixed inset-0 bg-black/40 z-40 md:hidden ${
+          open ? "block" : "hidden"
+        }`}
+        onClick={onClose}
+      />
+
+      <div
+        className={`z-50 md:z-auto md:static fixed md:relative top-0 left-0 md:top-auto md:left-auto h-full md:h-[calc(100vh-32px)] w-72 md:w-60 bg-white backdrop-blur-xl flex flex-col rounded-none md:rounded-[32px] transform transition-transform duration-200 md:transform-none ${
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
       <div className="p-4 flex justify-center">
         <img src="/images/logo.png" alt="YOUR LOGO HERE" className="w-40" />
       </div>
@@ -60,7 +79,7 @@ export const Sidebar = () => {
         ))}
       </nav>
 
-      <div className="px-5">
+      <div className="px-5 mb-6 mt-auto">
         <button
           className="flex items-center justify-center gap-2 w-full py-3 text-red-500 hover:text-white hover:bg-red-500 border-none rounded-xl font-medium cursor-pointer"
           onClick={handleLogout}
@@ -73,6 +92,7 @@ export const Sidebar = () => {
           <span>Disconnect Wallet</span>
         </button>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

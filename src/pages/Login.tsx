@@ -280,17 +280,6 @@ const Login: React.FC = () => {
           <span className="cursor-pointer text-[#1F7ABA]">Privacy Policy</span>
         </div>
       </div>
-      <style>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-20px);
-          }
-        }
-      `}</style>
     </div>
   );
 };
