@@ -212,6 +212,18 @@ export const botsAPI = {
     const response = await api.get(`/bots/${id}/process_status`);
     return response.data;
   },
+
+  // Get live error logs for a specific bot
+  getBotErrorLogs: async (id: string, lines: number = 50) => {
+    const response = await api.get(`/bots/${id}/error-logs?lines=${lines}`);
+    return response.data;
+  },
+
+  // Get error logs for all user bots
+  getAllBotsErrorLogs: async (lines: number = 30, onlyErrors: boolean = true) => {
+    const response = await api.get(`/bots/error-logs?lines=${lines}&only_errors=${onlyErrors}`);
+    return response.data;
+  },
 };
 
 // Memories API

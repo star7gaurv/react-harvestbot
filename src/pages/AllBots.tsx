@@ -3,10 +3,13 @@ import toast from "react-hot-toast";
 import { Sidebar } from "../components/Sidebar";
 import { Navbar } from "../components/Navbar";
 import { BotDetails } from "./BotDetails";
+import { LiveLogsModal } from "../components/LiveLogsModal";
 import { useBots, Bot as BotType } from "../hooks/useBots";
 
 const AllBots: React.FC = () => {
   const [selectedBot, setSelectedBot] = useState<BotType | null>(null);
+  const [showLiveLogsModal, setShowLiveLogsModal] = useState(false);
+  const [logsBot, setLogsBot] = useState<BotType | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [stopAllLoading, setStopAllLoading] = useState<{
     cex: boolean;
@@ -35,6 +38,12 @@ const AllBots: React.FC = () => {
 
   const handleBotClick = (bot: BotType) => {
     setSelectedBot(bot);
+  };
+
+  const handleViewLiveLogs = (bot: BotType, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent bot card click
+    setLogsBot(bot);
+    setShowLiveLogsModal(true);
   };
 
   const handleStopBot = async (botId: string) => {
@@ -282,17 +291,34 @@ const AllBots: React.FC = () => {
         key={bot.id}
         className={`relative bg-gradient-to-t from-[#09203F] to-[#537895] rounded-[20px] p-6 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
           isSelected ? "ring-2 ring-blue-400 ring-offset-2 shadow-lg" : ""
-        } ${actionLoading === bot.id ? "opacity-75 pointer-events-none" : ""}`}
+        } ${actionLoading === bot.id ? "opacity-75 pointer-events-none" : ""} ${
+          bot.status === "active" ? "hover:ring-2 hover:ring-green-400 hover:ring-offset-2" : ""
+        }`}
         onClick={() => !actionLoading && handleBotClick(bot)}
+        title="Click to view bot details"
       >
+        {/* Live indicator for running bots */}
+        {bot.status === "active" && (
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-green-400 text-xs font-medium">LIVE</span>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-start gap-5">
           <div className="flex flex-col gap-2 items-center">
-            <img
-              src="/images/bot.svg"
-              alt="any bot"
-              className="w-12 h-12 p-2 bg-white rounded-full"
-            />
+            <div className="relative">
+              <img
+                src="/images/bot.svg"
+                alt="any bot"
+                className="w-12 h-12 p-2 bg-white rounded-full"
+              />
+              {bot.status === "active" && (
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+              )}
+            </div>
             <span className="text-white text-base font-medium">{bot.name}</span>
           </div>
 
@@ -303,7 +329,16 @@ const AllBots: React.FC = () => {
             >
               {uptimeText}
             </div>
-            <div className="text-2xl text-white">{statusText}</div>
+            <div className="text-2xl text-white flex items-center gap-2">
+              {statusText}
+              {bot.status === "active" && (
+                <button
+                  onClick={(e) => handleViewLiveLogs(bot, e)}
+                  className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-full animate-pulse transition-all duration-200 cursor-pointer hover:scale-105 transform hover:shadow-lg font-medium border border-green-400"
+                  title="View live logs"
+                >View Logs</button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -522,6 +557,18 @@ const AllBots: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Live Logs Modal */}
+        {showLiveLogsModal && logsBot && (
+          <LiveLogsModal
+            bot={logsBot}
+            isOpen={showLiveLogsModal}
+            onClose={() => {
+              setShowLiveLogsModal(false);
+              setLogsBot(null);
+            }}
+          />
+        )}
       </div>
     </div>
   );
